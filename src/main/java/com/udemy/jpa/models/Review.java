@@ -8,21 +8,23 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "courses")
-@NamedQuery(name = "query_get_all_courses", query = "SELECT C FROM Course C")
+@Table(name = "reviews")
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Course {
+public class Review {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column(name = "rating", nullable = false)
+    private String rating;
+
     @Setter
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    @Column(name = "description", length = 200)
+    private String description;
 
     @UpdateTimestamp
     @Column(name = "updated_date")
@@ -34,6 +36,6 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("Course[%s]", this.name);
+        return String.format("Review[%s, %s]", this.rating, this.description);
     }
 }
