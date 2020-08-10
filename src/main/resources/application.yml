@@ -13,9 +13,20 @@ spring:
         web-allow-others: true
 
   jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
     hibernate:
       ddl-auto: update
     show-sql: true
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+logging:
+  level:
+    org:
+      hibernate:
+        stat: debug
+        type: trace
