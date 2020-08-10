@@ -25,5 +25,6 @@ public class JpaApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Course course = courseRepository.findById(10001L);
 		logger.info(String.format("Course 10001: %s", course.getName()));
+		courseRepository.save(Course.builder().name("Test04").build());
 	}
 }

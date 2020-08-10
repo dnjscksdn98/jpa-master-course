@@ -16,6 +16,7 @@ public class Course {
     @GeneratedValue
     private Long id;
 
+    @Setter
     @Column(name = "name", nullable = false)
     private String name;
 }

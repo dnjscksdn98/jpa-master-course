@@ -17,8 +17,6 @@ spring:
       hibernate:
         generate_statistics: true
         format_sql: true
-    hibernate:
-      ddl-auto: update
     show-sql: true
 
   jackson:
