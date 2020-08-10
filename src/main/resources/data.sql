@@ -1,0 +1,1 @@
+INSERT INTO courses(id, name) VALUES(10001, 'TEST01');
