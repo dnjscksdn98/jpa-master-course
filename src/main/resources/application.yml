@@ -1,1 +1,21 @@
+spring:
+  application:
+    name: master-jpa
 
+  devtools:
+    restart:
+      enabled: true
+
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
