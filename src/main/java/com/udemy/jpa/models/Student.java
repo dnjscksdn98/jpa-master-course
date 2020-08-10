@@ -8,13 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "courses")
-@NamedQuery(name = "query_get_all_courses", query = "SELECT C FROM Course C")
+@Table(name = "students")
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Course {
+public class Student {
 
     @Id
     @GeneratedValue
@@ -34,6 +33,6 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("Course[%s]", this.name);
+        return String.format("Student[%s]", this.name);
     }
 }
