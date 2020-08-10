@@ -44,4 +44,11 @@ public class JPQLTests {
         List<Course> courses = query.getResultList();
         logger.info(String.format("SELECT C FROM Course C WHERE name LIKE '%%1' -> %s", courses));
     }
+
+    @Test
+    public void findAllWithNamedQuery() {
+        TypedQuery<Course> query = entityManager.createNamedQuery("query_get_all_courses", Course.class);
+        List<Course> courses = query.getResultList();
+        logger.info(String.format("SELECT C FROM Course C -> %s", courses));
+    }
 }
