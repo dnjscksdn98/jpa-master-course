@@ -1,9 +1,6 @@
 package com.udemy.jpa.models;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "courses")
 @Getter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course {
 
@@ -18,9 +16,7 @@ public class Course {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "course_id", nullable = false, unique = true)
-    private String courseId;
-
+    @Setter
     @Column(name = "name", nullable = false)
     private String name;
 }
