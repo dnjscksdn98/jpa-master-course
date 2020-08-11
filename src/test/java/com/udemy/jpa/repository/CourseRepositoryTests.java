@@ -2,6 +2,7 @@ package com.udemy.jpa.repository;
 
 import com.udemy.jpa.JpaApplication;
 import com.udemy.jpa.models.Course;
+import com.udemy.jpa.models.Review;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -22,6 +26,9 @@ class CourseRepositoryTests {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     public void findById() {
@@ -56,6 +63,20 @@ class CourseRepositoryTests {
     @DirtiesContext
     public void playWithEntityManager() {
         courseRepository.playWithEntityManager();
+    }
+
+    @Test
+    @Transactional
+    public void retrieveReviewsForCourse() {
+        Course course = courseRepository.findById(10001L);
+        logger.info(String.format("Course reviews [%s]", course.getReviews()));
+    }
+
+    @Test
+    @Transactional
+    public void retrieveCourseForReview() {
+        Review review = entityManager.find(Review.class, 50001L);
+        logger.info(String.format("Review course [%s]", review.getCourse()));
     }
 
 }
