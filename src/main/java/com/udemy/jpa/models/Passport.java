@@ -23,6 +23,9 @@ public class Passport {
     @Column(name = "number", nullable = false, length = 100)
     private String number;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "passport")
+    private Student student;
+
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
