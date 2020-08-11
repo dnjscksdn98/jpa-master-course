@@ -26,6 +26,10 @@ public class Review {
     @Column(name = "description", length = 200)
     private String description;
 
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Course course;
+
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
