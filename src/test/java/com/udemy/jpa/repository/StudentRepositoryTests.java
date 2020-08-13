@@ -1,6 +1,7 @@
 package com.udemy.jpa.repository;
 
 import com.udemy.jpa.JpaApplication;
+import com.udemy.jpa.models.Course;
 import com.udemy.jpa.models.Passport;
 import com.udemy.jpa.models.Student;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,29 @@ class StudentRepositoryTests {
         Passport passport = entityManager.find(Passport.class, 30001L);
         logger.info(String.format("Passport[%s]", passport.getNumber()));
         logger.info(String.format("Student[%s]", passport.getStudent().getName()));
+    }
+
+    @Test
+    @Transactional
+    public void retrieveStudentAndCourses() {
+        Student student = entityManager.find(Student.class, 20001L);
+        logger.info(String.format("Student[%s]", student));
+        logger.info(String.format("Courses[%s]", student.getCourses()));
+    }
+
+    @Test
+    @Transactional
+    public void insertStudentAndCourse() {
+        Student student = Student.builder().name("Lee").build();
+        Course course = Course.builder().name("Java Functional Programming").build();
+        entityManager.persist(student);
+        entityManager.persist(course);
+
+        student.addCourse(course);
+        course.addStudent(student);
+
+        // Persist the relationship owning side
+        entityManager.persist(student);
     }
 
     @Test
