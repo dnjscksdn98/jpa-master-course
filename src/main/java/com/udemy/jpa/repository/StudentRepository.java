@@ -1,5 +1,6 @@
 package com.udemy.jpa.repository;
 
+import com.udemy.jpa.models.Course;
 import com.udemy.jpa.models.Passport;
 import com.udemy.jpa.models.Student;
 import org.slf4j.Logger;
@@ -46,6 +47,19 @@ public class StudentRepository {
         entityManager.persist(passport);
 
         Student student = Student.builder().name("Alex").passport(passport).build();
+        entityManager.persist(student);
+    }
+
+    public void insertStudentAndCourse() {
+        Student student = Student.builder().name("Lee").build();
+        Course course = Course.builder().name("Java Functional Programming").build();
+        entityManager.persist(student);
+        entityManager.persist(course);
+
+        student.addCourse(course);
+        course.addStudent(student);
+
+        // Persist the relationship owning side
         entityManager.persist(student);
     }
 }
