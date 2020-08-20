@@ -40,6 +40,7 @@ public class JpaApplication implements CommandLineRunner {
 						.hourlyWage(new BigDecimal("50"))
 						.build());
 
-		logger.info(String.format("Employees -> {%s}", employeeRepository.retrieveAllEmployees()));
+		logger.info(String.format("Full Time Employees -> {%s}", employeeRepository.retrieveAllFullTimeEmployees()));
+		logger.info(String.format("Part Time Employees -> {%s}", employeeRepository.retrieveAllPartTimeEmployees()));
 	}
 }
