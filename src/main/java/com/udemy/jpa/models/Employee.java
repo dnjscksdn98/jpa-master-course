@@ -4,9 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Employee {
 

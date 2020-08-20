@@ -1,6 +1,8 @@
 package com.udemy.jpa.repository;
 
 import com.udemy.jpa.models.Employee;
+import com.udemy.jpa.models.FullTimeEmployee;
+import com.udemy.jpa.models.PartTimeEmployee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,11 @@ public class EmployeeRepository {
         entityManager.persist(employee);
     }
 
-    public List<Employee> retrieveAllEmployees() {
-        return entityManager.createQuery("SELECT E FROM Employee E", Employee.class).getResultList();
+    public List<PartTimeEmployee> retrieveAllPartTimeEmployees() {
+        return entityManager.createQuery("SELECT E FROM PartTimeEmployee E", PartTimeEmployee.class).getResultList();
+    }
+
+    public List<FullTimeEmployee> retrieveAllFullTimeEmployees() {
+        return entityManager.createQuery("SELECT E FROM FullTimeEmployee E", FullTimeEmployee.class).getResultList();
     }
 }
