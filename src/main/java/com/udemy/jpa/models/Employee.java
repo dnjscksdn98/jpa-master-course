@@ -6,9 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "employees")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "EmployeeType")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Employee {
 
