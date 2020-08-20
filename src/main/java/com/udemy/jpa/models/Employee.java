@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Employee {
 
