@@ -1,3 +1,77 @@
+## 🚀 JPA Entity Relationships
+
+### ✔ 연관관계 설정 시 주의 사항
+- 데이터베이스 내의 데이터 중복을 방지하기 위해 한쪽 엔티티만을 연관관계의 주인으로 설정
+- -ToOne 연관 관계의 기본 ```FetchType```은 ```Eager``` 이므로 염두해 두기
+
+### ✔ @OneToOne
+
+- 기본적으로 ```FetchType``` 은 ```Eager```로 설정되어 있음
+- 연관관계의 주인을 설정할 때, 주인이 아닌 쪽에 ```mappedBy = {변수명}```을 설정해주면 됨
+
+**Student 클래스**
+
+```java
+@OneToOne(fetch = FetchType.LAZY)
+private Passport passport;
+```
+
+**Passport 클래스**
+
+```java
+@OneToOne(fetch = FetchType.LAZY, mappedBy = "passport")
+private Student student;
+```
+
+### ✔ @ManyToOne, @OneToMany
+
+- 기본적으로 ```@ManyToOne```의 ```FetchType``` 은 ```Eager```로 설정되어 있음
+- 기본적으로 ```@OneToMany```의 ```FetchType``` 은 ```Lazy```로 설정되어 있음
+- 연관관계의 주인은 ```@ManyToOne``` 쪽에 설정, 즉 ```mappedBy = {변수명}```는 ```@OneToMany``` 쪽에 설정
+
+**Review 클래스**
+
+```java
+@ManyToOne(fetch = FetchType.LAZY)
+private Course course;
+```
+
+**Course 클래스**
+
+```java
+@OneToMany(mappedBy = "course")
+private List<Review> reviews = new ArrayList<>();
+```
+
+### ✔ @ManyToMany
+
+- 기본적으로 ```@ManyToMany```의 ```FetchType``` 은 ```Lazy```로 설정되어 있음
+- 기본적으로 두 엔티티의 주키를 가지고 두개의 ```JoinTable```을 생성해줌
+(COURSE_STUDENTS, STUDENT_COURSES)
+- 그러나 이것은 좋지 않은 데이터베이스 설계이므로 둘 중에 한쪽을 연관관계의 주인으로 설정해줌으로써 문제 해결 가능
+- ```@JoinTable```은 연관관계의 주인 쪽에 설정
+- ```joinColumns```는 주인 쪽의 주키 설정
+- ```inverseJoinColumns```는 주인이 아닌 쪽의 주키 설정
+
+**Student 클래스(연관관계 주인)**
+
+```java
+@ManyToMany
+@JoinTable(
+    name = "STUDENT_COURSE",
+    joinColumns = @JoinColumn(name = "STUDENT_ID"),
+    inverseJoinColumns = @JoinColumn(name = "COURSE_ID")
+)
+private List<Course> courses = new ArrayList<>();
+```
+
+**Course 클래스**
+
+```java
+@ManyToMany(mappedBy = "courses")
+private List<Student> students = new ArrayList<>();
+```
+
 ## 🚀 JPA Inheritance Hierarchies and Mappings
 
 ### ✔ SINGLE_TABLE
