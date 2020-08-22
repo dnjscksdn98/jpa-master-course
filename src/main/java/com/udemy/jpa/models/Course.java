@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -18,7 +19,12 @@ import java.util.List;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SQLDelete(sql = "UPDATE courses SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
-@NamedQuery(name = "query_get_all_courses", query = "SELECT C FROM Course C")
+@NamedQueries(
+        value = {
+                @NamedQuery(name = "query_get_all_courses", query = "SELECT C FROM Course C"),
+                @NamedQuery(name = "query_get_all_courses_join_fetch", query = "SELECT C FROM Course C JOIN FETCH C.students S")
+        }
+)
 @Getter
 @Builder
 @AllArgsConstructor
