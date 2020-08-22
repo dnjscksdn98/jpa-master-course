@@ -25,6 +25,17 @@ spring:
       hibernate:
         generate_statistics: true
         format_sql: true
+
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+
+      javax:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
+
     show-sql: true
 
   jackson:
@@ -36,3 +47,7 @@ logging:
       hibernate:
         stat: debug
         type: trace
+
+    net:
+      sf:
+        ehcache: debug

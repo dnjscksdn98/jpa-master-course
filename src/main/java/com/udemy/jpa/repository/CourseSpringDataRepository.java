@@ -13,11 +13,11 @@ public interface CourseSpringDataRepository extends JpaRepository<Course, Long> 
 
     List<Course> findAllByName(String name);
 
+    Optional<Course> findByName(String name);
+
     Optional<Course> findByNameAndId(String name, Long id);
 
     Long countByName(String name);
-
-    List<Course> findAllOrderByIdDesc();
 
     void deleteByName(String name);
 
