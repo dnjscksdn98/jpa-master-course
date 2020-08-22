@@ -330,3 +330,130 @@ Rollback 시에는 해당 트랜잭션을 재시작하거나 폐기합니다.
 - ```SERIALIZABLE``` = 8
 
 ```spring.jpa.properties.hibernate.connection.isolation=2```
+
+## 🚀 1차 캐시와 2차 캐시
+
+<a><img src="https://i.ibb.co/S6vYyW7/jpa-cache-flowchart.png" width="700"></a>
+
+영속성 컨텍스트(Persistence Context)의 내부에는 엔티티를 보관하는 저장소가 있는데 이것을 ```1차 캐시(First Level Cache)```라고 부릅니다. 1차 캐시는 트랜잭션이 시작하고 종료할 때까지만 유효합니다. 즉, 트랜잭션 단위의 캐시입니다. 따라서 애플리케이션 전체로 보면 데이터베이스 접근 횟수를 획기적으로 줄이지는 못합니다.
+
+JPA 구현체들은 애플리케이션 단위의 캐시를 지원하는데 이것을 ```공유 캐시``` 또는 ```2차 캐시(Second Level Cache)``` 라고 부릅니다. 2차 캐시를 적용하면 애플리케이션 조회 성능을 향상할 수 있습니다.
+
+### ✔ 1차 캐시
+
+1차 캐시는 영속성 컨텍스트 내부에 있습니다. 엔티티 매니저로 조회하거나 변경하는 모든 엔티티는 1차 캐시에 저장됩니다. 트랜잭션을 Commit 하거나 Flush 를 하게 되면 1차 캐시에 있는 엔티티의 변경 사항들을 데이터베이스에 반영합니다.
+
+JPA를 스프링 프레임워크 같은 컨테이너 위에서 실행하면 트랜잭션을 시작할 때 영속성 컨텍스트를 생성하고 트랜잭션을 종료할 때 영속성 컨텍스트도 종료합니다.
+
+1차 캐시는 활성화하거나 비활성화할 수 있는 옵션이 아니고 영속성 컨텍스트 자체가 사실상 1차 캐시입니다.
+
+### ✔ 2차 캐시
+
+2차 캐시는 애플리케이션 단위의 캐시입니다. 따라서 애플리케이션을 종료할 때까지 캐시가 유지됩니다. 2차 캐시를 사용하면 엔티티 매니저를 통해 데이터를 조회할 때 우선 2차 캐시에서 찾고 없으면 데이터베이스에서 찾게 됩니다. 그래서 2차 캐시를 적절히 활용하면 데이터베이스 조회 횟수를 획기적으로 줄일 수 있습니다.
+
+2차 캐시는 동시성을 극대화하려고 캐시한 객체를 직접 반환하지 않고 복사본을 만들어서 반환합니다. 만약 캐시한 객체를 그대로 반환하면 여러 곳에서 같은 객체를 동시에 수정하는 문제가 발생할 수 있는데 이 문제를 해결하려면 객체에 락을 걸어야 하는데 이렇게 하면 동시성이 떨어질 수 있습니다. 락에 비하면 객체를 복사하는 비용은 아주 저렴하므로 2차 캐시는 복사본을 반환하게 됩니다.
+
+### ✔ Hibernate & EhCache
+
+Hibernate 가 지원하는 캐시는 크게 3가지가 있습니다.
+
+**1. 엔티티 캐시**
+	
+ - 엔티티 단위로 캐시합니다. 식별자(ID)로 엔티티를 조회하거나 컬렉션이 아닌 연관 관계에 있는 엔티티를 조회할 때 사용합니다.
+    
+**2. 컬렉션 캐시**
+
+- 엔티티와 연관된 컬렉션을 캐시합니다. 컬렉션이 엔티티를 담고 있으면 식별자 값만 캐시합니다.
+    
+**3. 쿼리 캐시**
+
+- 쿼리와 파라미터 정보를 키로 사용해서 캐시합니다. 결과가 엔티티면 식별자 값만 캐시합니다.
+    
+### ✔ 환경설정하기
+
+**의존성 설정**
+
+```
+<dependency>
+	<groupId>org.hibernate</groupId>
+	<artifactId>hibernate-ehcache</artifactId>
+</dependency>
+```
+
+**프로퍼티 설정**
+
+>```spring.jpa.properties.hibernate.cache.use_second_level_cache = true```
+> 💨 2차 캐시 활성화합니다.
+> ```spring.jpa.properties.hibernate.cache.region.factory_class```
+> 💨 2차 캐시를 처리할 클래스를 지정합니다.
+> ```spring.jpa.properties.hibernate.generate_statistics = true```
+> 💨 하이버네이트가 여러 통계정보를 출력하게 해주는데 캐시 적용 여부를 확인할 수 있습니다.
+> - L2C puts: 2차 캐시에 데이터 추가
+> - L2C hits: 2차 캐시의 데이터 사용
+> - L2C miss: 2차 캐시에 해당 데이터 조회 실패 -> 데이터베이스 접근
+
+```yml
+spring:
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
+
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+
+      javax:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
+            
+logging:
+  level:
+    net:
+      sf:
+        ehcache: debug
+```
+
+**엔티티 캐시와 컬렉션 캐시**
+
+> ```@Cacheable```
+> 💨 엔티티 캐시 적용시 사용하는 어노테이션
+>
+> ```@Cache```
+> 💨 하이버네이트 전용입니다. 캐시와 관련된 더 세밀한 설정을 할 때 사용합니다. 또한 컬렉션 캐시를 적용할 때에도 사용합니다.
+
+```java
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Entity
+public class Course {
+
+    @Id 
+    @GeneratedValue
+    private Long id;
+    
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "course")
+    private List<Review> reviews = new ArrayList<>();
+    ...
+}
+```
+
+### ✔ @Cache
+
+**CacheConcurrencyStrategy 속성**
+
+> ```READ_ONLY```
+> 💨 자주 조회하고 수정 작업을 하지 않는 데이터에 적합합니다.
+>
+> ```READ_WRITE```
+> 💨 조회 및 수정 작업을 하는 데이터에 적합합니다. Phantom Read 가 발생할 수 있으므로 SERIALIZABLE 격리 수준에서는 사용할 수 없습니다. 
+>
+> ```NONSTRICT_READ_WRITE```
+> 💨 거의 수정 작업을 하지 않는 데이터에 적합합니다.
