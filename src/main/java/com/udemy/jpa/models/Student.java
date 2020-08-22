@@ -25,6 +25,10 @@ public class Student {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    @Setter
+    @Embedded
+    private Address address;
+
     // 연관관계 주인
     @OneToOne(fetch = FetchType.LAZY)
     private Passport passport;
