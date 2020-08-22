@@ -22,9 +22,9 @@ INSERT INTO students(id, name, passport_id, created_date, updated_date) VALUES(2
 INSERT INTO students(id, name, passport_id, created_date, updated_date) VALUES(20002, 'Park', 30002, NOW(), NOW());
 INSERT INTO students(id, name, passport_id, created_date, updated_date) VALUES(20003, 'Kim', 30003, NOW(), NOW());
 
-INSERT INTO reviews(id, rating, description, course_id, created_date, updated_date) VALUES(50001, '4.5', 'Very good', 10001, NOW(), NOW());
-INSERT INTO reviews(id, rating, description, course_id, created_date, updated_date) VALUES(50002, '3.5', 'Pretty good', 10002, NOW(), NOW());
-INSERT INTO reviews(id, rating, description, course_id,created_date, updated_date) VALUES(50003, '2.0', 'Terrible', 10003, NOW(), NOW());
+INSERT INTO reviews(id, rating, description, course_id, created_date, updated_date) VALUES(50001, 'FOUR', 'Very good', 10001, NOW(), NOW());
+INSERT INTO reviews(id, rating, description, course_id, created_date, updated_date) VALUES(50002, 'THREE', 'Pretty good', 10002, NOW(), NOW());
+INSERT INTO reviews(id, rating, description, course_id,created_date, updated_date) VALUES(50003, 'TWO', 'Terrible', 10003, NOW(), NOW());
 
 INSERT INTO student_course(student_id, course_id) VALUES(20001, 10001);
 INSERT INTO student_course(student_id, course_id) VALUES(20002, 10001);
