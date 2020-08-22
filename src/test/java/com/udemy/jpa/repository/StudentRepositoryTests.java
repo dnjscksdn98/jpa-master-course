@@ -1,6 +1,7 @@
 package com.udemy.jpa.repository;
 
 import com.udemy.jpa.JpaApplication;
+import com.udemy.jpa.models.Address;
 import com.udemy.jpa.models.Course;
 import com.udemy.jpa.models.Passport;
 import com.udemy.jpa.models.Student;
@@ -19,7 +20,7 @@ import javax.persistence.EntityManager;
 @SpringBootTest(classes = JpaApplication.class)
 class StudentRepositoryTests {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentRepositoryTests.class);
 
     @Autowired
     private StudentRepository studentRepository;
@@ -31,24 +32,24 @@ class StudentRepositoryTests {
     @Transactional
     public void retrieveStudentAndPassportDetails() {
         Student student = entityManager.find(Student.class, 20001L);
-        logger.info(String.format("Student[%s]", student.getName()));
-        logger.info(String.format("Passport[%s]", student.getPassport().getNumber()));
+        LOGGER.info(String.format("Student[%s]", student.getName()));
+        LOGGER.info(String.format("Passport[%s]", student.getPassport().getNumber()));
     }
 
     @Test
     @Transactional
     public void retrievePassportAndAssociatedStudent() {
         Passport passport = entityManager.find(Passport.class, 30001L);
-        logger.info(String.format("Passport[%s]", passport.getNumber()));
-        logger.info(String.format("Student[%s]", passport.getStudent().getName()));
+        LOGGER.info(String.format("Passport[%s]", passport.getNumber()));
+        LOGGER.info(String.format("Student[%s]", passport.getStudent().getName()));
     }
 
     @Test
     @Transactional
     public void retrieveStudentAndCourses() {
         Student student = entityManager.find(Student.class, 20001L);
-        logger.info(String.format("Student[%s]", student));
-        logger.info(String.format("Courses[%s]", student.getCourses()));
+        LOGGER.info(String.format("Student[%s]", student));
+        LOGGER.info(String.format("Courses[%s]", student.getCourses()));
     }
 
     @Test
@@ -90,6 +91,16 @@ class StudentRepositoryTests {
         // Persist to Database
 
         // Kill Persistence Context
+    }
+
+    @Test
+    @Transactional
+    public void setAddressDetails() {
+        Student student = studentRepository.findById(20001L);
+        student.setAddress(Address.of("South Korea", "Nam-Yangjoo", "12345"));
+        studentRepository.save(student);
+
+        LOGGER.info(String.format("Student 20001 address -> {%s}", student.getAddress()));
     }
 
 }
