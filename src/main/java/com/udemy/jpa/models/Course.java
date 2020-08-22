@@ -1,20 +1,23 @@
 package com.udemy.jpa.models;
 
 import lombok.*;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "courses")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "courses")
+@SQLDelete(sql = "UPDATE courses SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 @NamedQuery(name = "query_get_all_courses", query = "SELECT C FROM Course C")
 @Getter
 @Builder
@@ -44,6 +47,14 @@ public class Course {
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private boolean isDeleted;
+
+    @PreRemove
+    private void preRemove() {
+        this.isDeleted = true;
+    }
 
     @Override
     public String toString() {
