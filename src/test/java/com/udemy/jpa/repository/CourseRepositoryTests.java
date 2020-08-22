@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest(classes = JpaApplication.class)
 class CourseRepositoryTests {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTests.class);
 
     @Autowired
     private CourseRepository courseRepository;
@@ -38,10 +38,13 @@ class CourseRepositoryTests {
     }
 
     @Test
-    @DirtiesContext
+    @Transactional
     public void deleteById() {
         courseRepository.deleteById(10001L);
+        LOGGER.info("Delete course 10001");
+
         Course course = courseRepository.findById(10001L);
+        LOGGER.info("Find course 10001");
 
         assertNull(course);
     }
@@ -69,21 +72,21 @@ class CourseRepositoryTests {
     @Transactional
     public void retrieveReviewsForCourse() {
         Course course = courseRepository.findById(10001L);
-        logger.info(String.format("Course reviews [%s]", course.getReviews()));
+        LOGGER.info(String.format("Course reviews [%s]", course.getReviews()));
     }
 
     @Test
     @Transactional
     public void retrieveCourseForReview() {
         Review review = entityManager.find(Review.class, 50001L);
-        logger.info(String.format("Review course [%s]", review.getCourse()));
+        LOGGER.info(String.format("Review course [%s]", review.getCourse()));
     }
 
     @Test
     @Transactional
     public void findByIdFirstLevelCache() {
         Course course = courseRepository.findById(10001L);
-        logger.info("First course retrieved");
+        LOGGER.info("First course retrieved");
 
         /**
          * First Level Cache - Single Transaction
@@ -92,7 +95,7 @@ class CourseRepositoryTests {
          * 트랜잭션 내의 PersistenceContext 내에서의 엔티티에 대한 데이터가 캐시되므로 다시 데이터베이스로 쿼리를 실행하지 않음
          */
         Course course2 = courseRepository.findById(10001L);
-        logger.info("First course retrieved again");
+        LOGGER.info("First course retrieved again");
 
         assertEquals("Spring MSA", course.getName());
         assertEquals("Spring MSA", course2.getName());
