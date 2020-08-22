@@ -19,8 +19,9 @@ public class Review {
     @GeneratedValue
     private Long id;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "rating", nullable = false)
-    private String rating;
+    private ReviewRating rating;
 
     @Setter
     @Column(name = "description", length = 200)

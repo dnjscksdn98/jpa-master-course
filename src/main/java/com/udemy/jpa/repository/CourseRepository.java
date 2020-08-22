@@ -2,6 +2,7 @@ package com.udemy.jpa.repository;
 
 import com.udemy.jpa.models.Course;
 import com.udemy.jpa.models.Review;
+import com.udemy.jpa.models.ReviewRating;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,11 +63,11 @@ public class CourseRepository {
         Course course = findById(10003L);
 
         // add 2 reviews to course + setting the relationship
-        Review review1 = Review.builder().rating("5").description("Awesome!").build();
+        Review review1 = Review.builder().rating(ReviewRating.FIVE).description("Awesome!").build();
         course.addReview(review1);
         review1.setCourse(course);
 
-        Review review2 = Review.builder().rating("1").description("Bad...").build();
+        Review review2 = Review.builder().rating(ReviewRating.ONE).description("Bad...").build();
         course.addReview(review2);
         review2.setCourse(course);
 
