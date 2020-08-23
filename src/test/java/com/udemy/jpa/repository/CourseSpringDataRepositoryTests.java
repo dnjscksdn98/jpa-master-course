@@ -14,18 +14,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = JpaApplication.class)
 public class CourseSpringDataRepositoryTests {
 
-    private final static Logger logger = LoggerFactory.getLogger(CourseSpringDataRepositoryTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseSpringDataRepositoryTests.class);
 
     @Autowired
     private CourseSpringDataRepository courseRepository;
@@ -33,7 +33,7 @@ public class CourseSpringDataRepositoryTests {
     @Test
     public void findByIdWithExistingData() {
         Optional<Course> course = courseRepository.findById(10001L);
-        logger.info(String.format("Is course 10001 present? -> {%s}", course.isPresent()));
+        LOGGER.info(String.format("Is course 10001 present? -> {%s}", course.isPresent()));
 
         assertTrue(course.isPresent());
     }
@@ -41,7 +41,7 @@ public class CourseSpringDataRepositoryTests {
     @Test
     public void findByIdWithNonExistingData() {
         Optional<Course> course = courseRepository.findById(99999L);
-        logger.info(String.format("Is course 99999 present? -> {%s}", course.isPresent()));
+        LOGGER.info(String.format("Is course 99999 present? -> {%s}", course.isPresent()));
 
         assertFalse(course.isPresent());
     }
@@ -61,8 +61,8 @@ public class CourseSpringDataRepositoryTests {
         List<Course> courses = courseRepository.findAll();
         Long count = courseRepository.count();
 
-        logger.info(String.format("Number of courses -> %s", count));
-        logger.info(String.format("Courses -> {%s}", courses));
+        LOGGER.info(String.format("Number of courses -> %s", count));
+        LOGGER.info(String.format("Courses -> {%s}", courses));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class CourseSpringDataRepositoryTests {
         List<Course> courses = courseRepository.findAll(sort);
         Long count = courseRepository.count();
 
-        logger.info(String.format("Number of courses -> %s", count));
-        logger.info(String.format("Courses -> {%s}", courses));
+        LOGGER.info(String.format("Number of courses -> %s", count));
+        LOGGER.info(String.format("Courses -> {%s}", courses));
     }
 
     @Test
@@ -80,18 +80,30 @@ public class CourseSpringDataRepositoryTests {
         PageRequest pageRequest = PageRequest.of(0, 3);
         Page<Course> firstPage = courseRepository.findAll(pageRequest);
 
-        logger.info(String.format("First page -> {%s}", firstPage.getContent()));
+        LOGGER.info(String.format("First page -> {%s}", firstPage.getContent()));
 
         Pageable secondPageable = firstPage.nextPageable();
         Page<Course> secondPage = courseRepository.findAll(secondPageable);
 
-        logger.info(String.format("Second page -> {%s}", secondPage.getContent()));
+        LOGGER.info(String.format("Second page -> {%s}", secondPage.getContent()));
     }
 
     @Test
     public void findAllCoursesByName() {
         List<Course> courses = courseRepository.findAllByName("Spring Data JPA");
 
-        logger.info(String.format("Course -> {%s}", courses));
+        LOGGER.info(String.format("Course -> {%s}", courses));
+    }
+
+    @Test
+    @Transactional
+    public void modifyingTest() {
+        Course course = Course.of("before");
+        courseRepository.save(course);
+
+        int result = courseRepository.updateById(1L, "after");
+        assertEquals(result, 1);
+
+        LOGGER.info(String.format("Updated Course Name -> {%s}", courseRepository.findById(1L).get().getName()));
     }
 }

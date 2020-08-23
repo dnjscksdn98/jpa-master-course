@@ -2,6 +2,7 @@ package com.udemy.jpa.repository;
 
 import com.udemy.jpa.models.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,9 @@ public interface CourseSpringDataRepository extends JpaRepository<Course, Long> 
     // Named Query
     @Query(name = "query_get_all_courses")
     List<Course> findAllWithSpringUsingNamedQuery();
+
+    // @Modifying test query method
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE Course C SET C.name = ?2 WHERE C.id = ?1")
+    int updateById(Long id, String name);
 }

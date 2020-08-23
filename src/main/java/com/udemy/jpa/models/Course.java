@@ -82,4 +82,12 @@ public class Course {
     public void removeStudent(Student student) {
         this.students.remove(student);
     }
+
+    private Course(String name) {
+        this.name = name;
+    }
+
+    public static Course of(String name) {
+        return new Course(name);
+    }
 }
