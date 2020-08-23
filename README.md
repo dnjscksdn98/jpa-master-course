@@ -2,8 +2,8 @@
 
 ## JPA Master Course
 
-![](https://img.shields.io/badge/docs-velog-brightgreen)
-![](https://img.shields.io/badge/references-udemy-brightgreen)
+[![](https://img.shields.io/badge/docs-velog-brightgreen)](https://velog.io/@dnjscksdn98/series/JPA)
+[![](https://img.shields.io/badge/references-udemy-brightgreen)](https://www.udemy.com/course/hibernate-jpa-tutorial-for-beginners-in-100-steps/)
 
 ## 🎯 목차
 1. [Entity Manager, Transaction, Persistence Context](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Transaction-Entity-Manager-Persistence-Context)
