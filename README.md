@@ -1,3 +1,23 @@
+<a><img src="https://i.ibb.co/rpS4wFD/jpa.png" alt="jpa" border="0"></a>
+
+## JPA Master Course
+
+![](https://img.shields.io/badge/docs-velog-brightgreen)
+![](https://img.shields.io/badge/references-udemy-brightgreen)
+
+## 🎯 목차
+1. [Entity Manager, Transaction, Persistence Context](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Transaction-Entity-Manager-Persistence-Context)
+2. [JPA & Hibernate Annotations](https://velog.io/@dnjscksdn98/Spring-Data-JPA-JPA-Hibernate-Annotations)
+3. [JPQL(Java Persistence Query Language)](https://velog.io/@dnjscksdn98/Spring-Data-JPA-JPQLJava-Persistence-Query-Language)
+4. [Native Queries](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Native-Queries)
+5. Named Queries
+6. [Fetch Type: Eager vs Lazy](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Eager-Fetch-vs-Lazy-Fetch)
+7. [Entity Relationships](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Entity-Relationships)
+8. [Inheritance & Mapping](https://velog.io/@dnjscksdn98/Spring-Data-JPA-Inheritance-Hierarchies-and-Mappings)
+9. [Transaction Management](https://velog.io/@dnjscksdn98/JPA-Hibernate-Transaction-Management)
+10. [First Level Cache & Second Level Cache](https://velog.io/@dnjscksdn98/JPA-Hibernate-First-Level-Cache-Second-Level-Cache)
+11. [Spring Data JPA](https://velog.io/@dnjscksdn98/JPA-Hibernate-Spring-Data-JPA)
+
 ## 🚀 JPA Entity Relationships
 
 ### ✔ 연관관계 설정 시 주의 사항
